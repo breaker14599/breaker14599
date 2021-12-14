@@ -20,6 +20,7 @@ type details []detail
 func allDetails(w http.ResponseWriter, r *http.Request) {
 	details := details{
 		detail{Name: "Thiru", Age: 22, Dept: "cse", Batch: 2020},
+		detail{Name: "Deepak", Age: 23, Dept: "cse", Batch: 2020},
 	}
 	fmt.Println("Details were displayed")
 	json.NewEncoder(w).Encode(details)
