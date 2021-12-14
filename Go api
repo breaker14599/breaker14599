@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,16 +9,35 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "BASIC API")
-	fmt.Println(" mux works")
+type detail struct {
+	Name  string `json:"name"`
+	Age   int    `json:"Age"`
+	Dept  string `json:"dept"`
+	Batch int    `json:"batch"`
+}
+type details []detail
+
+func allDetails(w http.ResponseWriter, r *http.Request) {
+	details := details{
+		detail{Name: "Thiru", Age: 22, Dept: "cse", Batch: 2020},
+	}
+	fmt.Println("Details were displayed")
+	json.NewEncoder(w).Encode(details)
 
 }
+func testallDetails(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Checks the POST works")
+}
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "baisc api")
+}
 func handleRequests() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", homePage).Methods(http.MethodGet)
-	log.Fatal(http.ListenAndServe(":10000", r))
+	r.HandleFunc("/details", allDetails).Methods(http.MethodGet)
+	r.HandleFunc("/details", testallDetails).Methods(http.MethodPost)
+	log.Fatal(http.ListenAndServe(":8081", r))
 }
 
 func main() {
